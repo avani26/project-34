@@ -14,15 +14,13 @@ function preload()
 }
 
 function setup() {
-// database=firebase.database();
- 
-database= firebase.initializeApp(firebaseConfig);
-
+ database=firebase.database();
 
 	createCanvas(500,500);
   
-  var dog=createSprite(250,250,30,40);
-     dog.addImge(dogImg);
+   dog=createSprite(250,250,30,40);
+     dog.addImage(dogImg);
+     dog.scale=0.5;
 
   foodStock=database.ref('food');
   foodStock.on("value",readStock);
@@ -32,27 +30,31 @@ database= firebase.initializeApp(firebaseConfig);
 function draw() {  
 background(rgb="46,139,87");
 
-if(keyWentDown(UP_Arrow)){
+if(keyWentDown(UP_ARROW)){
   writeStock(foodS);
   dog.addImage(HappydogImg);
 }
 
   drawSprites();
-  testSixe(30);
-  text("FoodStock",50,70);
+  textSize(30);
+  text("FoodStock="+foodS,50,70);
   //add styles here
 
 }
 
+function readStock(data){
+  foodS=data.val();
+}
+
 function writeStock(x){
-if(x<-0){
+if(x<=0){
   x=0;
 }
 else {
   x=x-1;
 }
 
-database.ref('/'.update)({
+database.ref('/').update({
     food:x
   })
 }
